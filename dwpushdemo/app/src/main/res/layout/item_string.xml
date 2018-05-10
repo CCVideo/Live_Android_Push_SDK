@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout style="@style/ItemSimpleBgStyle"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/id_string_tip"
+        style="@style/ItemSimpleTipStyle"/>
+
+    <ImageView
+        android:id="@+id/id_string_icon"
+        style="@style/ItemSimpleIconStyle"
+        android:src="@drawable/select_icon_normal"/>
+
+</RelativeLayout>

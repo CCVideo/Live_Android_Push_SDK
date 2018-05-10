@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FF6633</color>
+    <color name="colorPrimaryDark">#D54616</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="editTextHintColor">#b3b0b0</color>
+    <color name="itemLayoutNormal">#ffffff</color>
+    <color name="itemLayoutPressed">#eceaea</color>
+    <color name="handleItemNormal">#000000</color>
+    <color name="handleItemPressed">#999999</color>
+    <color name="result_view">#b0000000</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="possible_result_points">#c0ffff00</color>
+    <!--标题背景色-->
+    <color name="colorTitleBg">#FF6633</color>
+    <!-- 登录按钮背景色 -->
+    <color name="colorPilotButtonPressBg">#D54616</color>
+    <color name="colorPilotButtonBg">#FF6633</color>
+    <color name="colorButtonBgDisble">#FF9c7a</color>
+    <!-- 登录页面背景色 -->
+    <color name="colorLoginBg">#fafafa</color>
+    <!-- 登录页其他颜色配置-->
+    <color name="divideLine">#e8e8e8</color>
+    <!--界面提示文字颜色-->
+    <color name="colorTopTip">#666666</color>
+    <color name="colorItemTip">#333333</color>
+    <color name="colorItemValue">#666666</color>
+    <!--item 分割线-->
+    <color name="colorItemLine">#DDDDDD</color>
+    <color name="colorItemNormal">#FFFFFF</color>
+    <color name="colorItemPressed">#DDDDDD</color>
+    <color name="colorItemClip">#4CBBBBBB</color>
+    <!--togglebutton color-->
+    <color name="colorThumb">#FFFFFF</color>
+    <color name="colorThumbHov">#FFFFFF</color>
+    <color name="colorBack">#999999</color>
+    <color name="colorBackHov">#FF6633</color>
+
+
+</resources>
