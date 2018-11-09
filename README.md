@@ -1,2 +1,0 @@
-# Live_Android_Push_SDK
-cc视频云直播 Android平台推流SDK和Demo

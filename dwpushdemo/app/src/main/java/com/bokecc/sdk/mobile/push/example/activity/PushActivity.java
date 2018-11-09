@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -50,6 +52,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.bokecc.sdk.mobile.push.core.DWPushConfig.PORTRAIT;
 
 public class PushActivity extends BaseActivity<PushPresenter> implements PushContract.View {
 
@@ -157,6 +161,10 @@ public class PushActivity extends BaseActivity<PushPresenter> implements PushCon
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 全屏
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN, WindowManager.LayoutParams. FLAG_FULLSCREEN);
+
         super.onCreate(savedInstanceState);
 
         if (DWApplication.mReportLog) {
@@ -178,12 +186,38 @@ public class PushActivity extends BaseActivity<PushPresenter> implements PushCon
         // 保持屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         DWPushConfig pushConfig = (DWPushConfig) getIntent().getSerializableExtra(KEY_PUSH_CONFIG);
-        if (pushConfig.orientation == DWPushConfig.PORTRAIT) {
+        if (pushConfig.orientation == PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
 
+
+        //页面 16 ：9 适配逻辑
+        int screenWidth, screenHeight;
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        screenWidth = dm.widthPixels;
+        screenHeight = dm.heightPixels;
+
+        int baseSize;
+        if(screenWidth > screenHeight) {
+            baseSize = screenHeight;
+        } else {
+            baseSize = screenWidth;
+        }
+
+        int initialWidth, initialHeight;
+        if (pushConfig.orientation == PORTRAIT) {
+            initialWidth = baseSize;
+            initialHeight = initialWidth / 9 * 16;
+            if (initialHeight > screenHeight) {
+                initialHeight = screenHeight;
+            }
+        } else {
+            initialHeight = baseSize;
+            initialWidth = initialHeight / 9 * 16;
+        }
+        mRoot.setLayoutParams(new FrameLayout.LayoutParams(initialWidth, initialHeight));
         mBeautifulView.setVisibility(View.GONE);
         mVolumeView.setVisibility(View.GONE);
         mBeautifulView.setClickable(true);
@@ -458,7 +492,8 @@ public class PushActivity extends BaseActivity<PushPresenter> implements PushCon
         }
         privateUser.setMsg(chatEntity.getMsg());
         privateUser.setTime(chatEntity.getTime());
-        privateUser.setRead(isPrivateChatMsg && (chatEntity.isPublisher() || chatEntity.getUserId().equals(mCurPrivateUserId)));
+        // 如果当前就在这个私聊界面，或者收到的私聊是主播发出去的，就设为已读
+        privateUser.setRead((isPrivateChatMsg && chatEntity.getUserId().equals(mCurPrivateUserId)) || chatEntity.isPublisher());
         mPrivateUserAdapter.add(privateUser);
         if (!isAllPrivateChatRead()) {
             mPrivateIcon.setImageResource(R.drawable.push_private_msg_new);

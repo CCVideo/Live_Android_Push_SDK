@@ -284,6 +284,10 @@ public class SettingActivity extends TitleActivity<HomePresenter, SettingActivit
 
         // 初始化码率选项模式
         private void initBitrateWindow() {
+            // 如果当前默认的码率超过了用户当前账号支持的最大码率，则修正一下
+            if (mBitrateCurrentValue > getMaxBitrate()) {
+                mBitrateCurrentValue = getMaxBitrate();
+            }
             mBitrate.setValue(String.valueOf(mBitrateCurrentValue + "kbs"));
             mBitrate.setOnClickListener(new View.OnClickListener() {
                 @Override
