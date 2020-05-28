@@ -15,17 +15,20 @@ import com.bokecc.sdk.mobile.push.chat.model.ChatUser;
 import com.bokecc.sdk.mobile.push.core.DWPushConfig;
 import com.bokecc.sdk.mobile.push.core.DWPushSession;
 import com.bokecc.sdk.mobile.push.core.listener.DWOnPushStatusListener;
+import com.bokecc.sdk.mobile.push.entity.LiveCurrentInfo;
+import com.bokecc.sdk.mobile.push.entity.RoomInfo;
 import com.bokecc.sdk.mobile.push.example.R;
 import com.bokecc.sdk.mobile.push.example.contract.PushContract;
 import com.bokecc.sdk.mobile.push.example.model.ChatEntity;
 import com.bokecc.sdk.mobile.push.example.util.EmojiUtil;
+import com.bokecc.sdk.mobile.push.logging.ELog;
 import com.bokecc.sdk.mobile.push.tools.LogUtil;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * 作者 ${郭鹏飞}.<br/>
+ * 作者 ${bokecc}.<br/>
  */
 public class PushPresenter implements PushContract.Presenter {
 
@@ -39,6 +42,9 @@ public class PushPresenter implements PushContract.Presenter {
     private Timer mLiveTimeTimer; // 直播时间计时器
     private long mStartLiveTime; // 开始推流时间戳
 
+    private Timer mRecordTimer;
+    private long mRecordTime = 0;
+
     private int colors[] = new int[]{
             Color.parseColor("#FFFFFF"), // 白色
             Color.parseColor("#FFFF00"), // 黄色
@@ -47,9 +53,17 @@ public class PushPresenter implements PushContract.Presenter {
             Color.parseColor("#FF0000"), // 红色
     };
 
+    private RoomInfo roomInfo;
+    private boolean isPushing;  // 是否开始直播
+    private boolean isPressRecord; // 是否按下录制按钮
+
     public PushPresenter(PushContract.View pushView) {
         mPushView = pushView;
         mActivity = (Activity) pushView;
+    }
+
+    public void setPushing(boolean pushing) {
+        isPushing = pushing;
     }
 
     public void setPushSession(DWPushSession pushSession) {
@@ -101,8 +115,8 @@ public class PushPresenter implements PushContract.Presenter {
         if (subString.length() >= 8) {
             int imgIndex = subString.lastIndexOf("[em2_");
 
-            if ((imgIndex + 8) == arrowPosition ) {
-                if (EmojiUtil.pattern.matcher(editable.toString().substring(imgIndex, imgIndex+8)).find()) {
+            if ((imgIndex + 8) == arrowPosition) {
+                if (EmojiUtil.pattern.matcher(editable.toString().substring(imgIndex, imgIndex + 8)).find()) {
                     editable.delete(arrowPosition - 8, arrowPosition);
                 } else {
                     editable.delete(arrowPosition - 1, arrowPosition);
@@ -125,6 +139,26 @@ public class PushPresenter implements PushContract.Presenter {
         SpannableString ss = new SpannableString(pre + emojiStr + next);
         mInput.setText(EmojiUtil.parseFaceMsg(mActivity, ss));
         mInput.setSelection(index + emojiStr.length());
+    }
+
+
+    /**
+     * 开始录制的计时任务
+     */
+    private void loopForRecordTime() {
+        if (mRecordTimer != null) {
+            mRecordTimer.cancel();
+            mRecordTimer = null;
+        }
+
+        mRecordTimer = new Timer();
+        mRecordTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                mRecordTime += 1000;
+                mPushView.updateRecordText("录制中：" + formatTime(mRecordTime));
+            }
+        }, 1000, 1000);
     }
 
     /**
@@ -161,7 +195,7 @@ public class PushPresenter implements PushContract.Presenter {
 
         String minuteStr = minute < 10 ? "0" + minute : "" + minute;
         String secondStr = second < 10 ? "0" + second : "" + second;
-        return (minuteStr  + ":"  + secondStr);
+        return (minuteStr + ":" + secondStr);
     }
 
     @Override
@@ -172,9 +206,7 @@ public class PushPresenter implements PushContract.Presenter {
         } else {
             LogUtil.e(TAG, "配置失败");
         }
-        // 设置开始直播时间，并开始计时任务
-        mStartLiveTime = System.currentTimeMillis();
-        loopForLiveTime();
+
     }
 
     @Override
@@ -188,12 +220,22 @@ public class PushPresenter implements PushContract.Presenter {
 
             @Override
             public void onSuccessed() {
+                ELog.i(TAG, "onSucceeded:");
                 mPushView.dismissDialogLoading();
                 mPushView.updateStatus(colors[2], mActivity.getResources().getString(R.string.text_push_status_success));
+                roomInfo = mPushSession.getRoomInfo();
+                if (roomInfo.getManuallyRecordMode() == 1) {
+                    // 手动录制开启
+                    mPushView.enableRecordMode();
+                } else {
+                    // 手动录制关闭
+                    mPushView.disableRecordMode();
+                }
             }
 
             @Override
             public void onFailed(String message) {
+                ELog.i(TAG, "onFailed:" + message);
                 mPushView.dismissDialogLoading();
                 mPushView.updateStatus(colors[4],
                         mActivity.getResources().getString(R.string.text_push_status_failed));
@@ -203,12 +245,14 @@ public class PushPresenter implements PushContract.Presenter {
 
             @Override
             public void onDisconnected() {
+                ELog.i(TAG, "onDisconnected:");
                 mPushView.updateStatus(colors[3],
                         mActivity.getResources().getString(R.string.text_push_status_disconnect));
             }
 
             @Override
             public void onReconnect() {
+                ELog.i(TAG, "onReconnect:");
                 mPushView.dismissDialogLoading();
                 mPushView.updateStatus(colors[1],
                         mActivity.getResources().getString(R.string.text_push_status_reconnect));
@@ -216,6 +260,7 @@ public class PushPresenter implements PushContract.Presenter {
 
             @Override
             public void onClosed(int action) {
+                ELog.i(TAG, "onClosed:");
                 mPushView.updateStatus(colors[0],
                         mActivity.getResources().getString(R.string.text_push_status_close));
                 if (action == DWPushSession.RTMP_CLOSE_NO_HEART_BEAT_ACTION) {
@@ -223,7 +268,29 @@ public class PushPresenter implements PushContract.Presenter {
                     mPushView.exit();
                 }
             }
+
+            @Override
+            public void onCurrentInfo(LiveCurrentInfo info) {
+                float freeBufferPercent = info.freeBufferPercent;
+                String state;
+                if (freeBufferPercent > 0.88) {
+                    state = "优";
+                } else if (freeBufferPercent > 0.66) {
+                    state = "良";
+                } else if (freeBufferPercent > 0.33) {
+                    state = "弱";
+                } else {
+                    state = "差";
+                }
+
+                mPushView.updatePushNetState(state);
+            }
+
         });
+        // 设置开始直播时间，并开始计时任务
+        mStartLiveTime = System.currentTimeMillis();
+        loopForLiveTime();
+
     }
 
     @Override
@@ -236,15 +303,120 @@ public class PushPresenter implements PushContract.Presenter {
         mPushSession.switchCamera();
     }
 
+    @Override
+    public void startRecord() {
+        if (isPressRecord) return;
+        if (!isPushing) return;
+        DWPushSession.RecordState recordState = mPushSession.getRecordState();
+
+        if (recordState == DWPushSession.RecordState.IDLE || recordState == DWPushSession.RecordState.STOP) {
+            mPushSession.startRecord(new DWPushSession.RecordCallBack() {
+                @Override
+                public void onResult(boolean isSuccess, String msg) {
+                    if (isSuccess) {
+                        mPushView.updateRecordState(R.drawable.push_record_pause);
+                        mPushView.enableStopButton();
+                        mPushView.updateRecordText("录制中： " + formatTime(mRecordTime));
+                        loopForRecordTime();
+                    } else {
+                        mPushView.updateRecordState(R.drawable.push_record_start);
+                        mPushView.disableStopButton();
+                    }
+                    isPressRecord = false;
+                }
+            });
+        } else if (recordState == DWPushSession.RecordState.RECORDING) {
+            pauseRecord();
+        } else if (recordState == DWPushSession.RecordState.PAUSE) {
+            resumeRecord();
+
+        }
+
+
+    }
+
+    @Override
+    public void pauseRecord() {
+        if (isPressRecord) return;
+        if (!isPushing) return;
+        mPushSession.pauseRecord(new DWPushSession.RecordCallBack() {
+            @Override
+            public void onResult(boolean isSuccess, String msg) {
+                if (isSuccess) {
+                    mPushView.updateRecordState(R.drawable.push_record_resume);
+                    mPushView.enableStopButton();
+                    mPushView.updateRecordText("暂停录制中：" + formatTime(mRecordTime));
+                    if (mRecordTimer != null) {
+                        mRecordTimer.cancel();
+                        mRecordTimer = null;
+                    }
+
+                } else {
+                    mPushView.updateRecordState(R.drawable.push_record_pause);
+                    mPushView.enableStopButton();
+                }
+                isPressRecord = false;
+            }
+        });
+    }
+
+    @Override
+    public void resumeRecord() {
+        if (isPressRecord) return;
+        if (!isPushing) return;
+        mPushSession.resumeRecord(new DWPushSession.RecordCallBack() {
+            @Override
+            public void onResult(boolean isSuccess, String msg) {
+                if (isSuccess) {
+                    mPushView.updateRecordState(R.drawable.push_record_pause);
+                    mPushView.enableStopButton();
+                    loopForRecordTime();
+                } else {
+                    mPushView.updateRecordState(R.drawable.push_record_resume);
+                    mPushView.enableStopButton();
+                }
+                isPressRecord = false;
+            }
+        });
+
+    }
+
+    @Override
+    public void stopRecord() {
+        if (isPressRecord) return;
+        if (!isPushing) return;
+        mPushSession.stopRecord(new DWPushSession.RecordCallBack() {
+            @Override
+            public void onResult(boolean isSuccess, String msg) {
+                if (isSuccess) {
+                    mPushView.updateRecordState(R.drawable.push_record_start);
+                    mPushView.disableStopButton();
+                    if (mRecordTimer != null) {
+                        mRecordTimer.cancel();
+                        mRecordTimer = null;
+                    }
+                    mRecordTime = 0;
+                    mPushView.updateRecordText("暂无录制");
+                } else {
+                    mPushView.enableStopButton();
+                }
+                isPressRecord = false;
+            }
+        });
+
+    }
+
     // ---------------------生命周期--------------------------
 
     @Override
     public void onResume() {
+        if (!isPushing) return;
         mPushSession.onResume();
     }
 
     @Override
     public void onPause() {
+        if (!isPushing) return;
         mPushSession.onPause();
     }
 
@@ -259,6 +431,11 @@ public class PushPresenter implements PushContract.Presenter {
             mLiveTimeTimer.cancel();
             mLiveTimeTimer = null;
         }
+        if (mRecordTimer != null) {
+            mRecordTimer.cancel();
+            mRecordTimer = null;
+        }
+        mPushSession = null;
     }
 
     // ---------------------生命周期--------------------------

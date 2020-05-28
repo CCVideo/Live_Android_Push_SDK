@@ -46,7 +46,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
             if (isNeedPresenter) {
                 mPresenter = getPresenter();// 如果需要P层 对P进行实例化
             }
-            setUpView();
+            setUpView(savedInstanceState);
         }
     }
 
@@ -73,8 +73,9 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
 
     /**
      * 进行界面操作
+     * @param savedInstanceState
      */
-    protected abstract void setUpView();
+    protected abstract void setUpView(Bundle savedInstanceState);
 
     /**
      * 获取 {@link BasePresenter}

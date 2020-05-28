@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 /**
- * 作者 ${郭鹏飞}.<br/>
+ * 作者 ${bokecc}.<br/>
  */
 public class TextViewUtil {
     private TextViewUtil() {

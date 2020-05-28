@@ -23,8 +23,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/line"
-                android:layout_marginEnd="@dimen/item_margin_end"
                 android:layout_marginStart="@dimen/item_margin_start"
+                android:layout_marginEnd="@dimen/item_margin_end"
                 android:background="@color/colorItemLine" />
 
             <!-- 横屏模式 -->
@@ -46,8 +46,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/line"
-                android:layout_marginEnd="@dimen/item_margin_end"
                 android:layout_marginStart="@dimen/item_margin_start"
+                android:layout_marginEnd="@dimen/item_margin_end"
                 android:background="@color/colorItemLine" />
 
             <!-- 美颜 -->
@@ -68,8 +68,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/line"
-                android:layout_marginEnd="@dimen/item_margin_end"
                 android:layout_marginStart="@dimen/item_margin_start"
+                android:layout_marginEnd="@dimen/item_margin_end"
                 android:background="@color/colorItemLine" />
 
             <com.bokecc.sdk.mobile.push.example.view.SettingItemLayout
@@ -82,55 +82,42 @@
                 android:id="@+id/id_setting_resolution"
                 style="@style/ItemStylePaddingLine"
                 item:tipTxt="@string/resolution"
-                item:valueTxt="@string/setting_resolution_default"/>
+                item:valueTxt="@string/setting_resolution_default" />
 
             <com.bokecc.sdk.mobile.push.example.view.SettingItemLayout
                 android:id="@+id/id_setting_bitrate"
                 style="@style/ItemStylePaddingLine"
                 item:tipTxt="@string/bitrate"
-                item:valueTxt="@string/setting_bitrate_default"/>
+                item:valueTxt="@string/setting_bitrate_default" />
 
             <com.bokecc.sdk.mobile.push.example.view.SettingItemLayout
                 android:id="@+id/id_setting_fps"
                 style="@style/ItemStylePaddingLine"
                 item:tipTxt="@string/fps"
-                item:valueTxt="@string/setting_fps_default"/>
+                item:valueTxt="@string/setting_fps_default" />
 
             <com.bokecc.sdk.mobile.push.example.view.SettingItemLayout
                 android:id="@+id/id_setting_server"
                 style="@style/ItemStyle"
-                item:tipTxt="@string/server"/>
+                item:tipTxt="@string/server" />
 
             <Button
                 android:id="@+id/id_push_btn"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
-                android:layout_marginEnd="36dp"
                 android:layout_marginStart="36dp"
                 android:layout_marginTop="35dp"
+                android:layout_marginEnd="36dp"
                 android:background="@drawable/round_btn_selector"
                 android:text="@string/setting_start"
                 android:textColor="#ffffff"
-                android:textSize="17sp"/>
+                android:textSize="17sp"
+                android:visibility="gone" />
 
         </LinearLayout>
 
     </ScrollView>
 
-
-
-    <!--<Button-->
-        <!--android:id="@+id/id_push_btn"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignParentEnd="true"-->
-        <!--android:background="@drawable/push_btn"-->
-        <!--android:paddingBottom="15dp"-->
-        <!--android:paddingTop="15dp"-->
-        <!--android:text="@string/setting_start"-->
-        <!--android:textColor="#ffffff"-->
-        <!--android:textSize="16sp" />-->
 
 </RelativeLayout>

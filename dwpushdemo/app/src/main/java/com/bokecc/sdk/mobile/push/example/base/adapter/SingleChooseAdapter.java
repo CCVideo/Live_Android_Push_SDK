@@ -11,7 +11,7 @@ import com.bokecc.sdk.mobile.push.example.popup.SingleChoosePopup;
 import java.util.ArrayList;
 
 /**
- * 作者 ${郭鹏飞}.<br/>
+ * 作者 ${bokecc}.<br/>
  */
 public abstract class SingleChooseAdapter<VH extends SingleViewHolder, T> extends RecyclerView.Adapter<VH> {
 

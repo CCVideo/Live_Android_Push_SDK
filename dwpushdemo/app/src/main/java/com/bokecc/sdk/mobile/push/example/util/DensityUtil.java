@@ -5,7 +5,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
 /**
- * 作者 ${郭鹏飞}.<br/>
+ * 作者 ${bokecc}.<br/>
  */
 public class DensityUtil {
 

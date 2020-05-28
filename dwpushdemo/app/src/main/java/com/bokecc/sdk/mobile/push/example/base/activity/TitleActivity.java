@@ -47,7 +47,7 @@ public abstract class TitleActivity<T extends BasePresenter, V extends TitleActi
     }
 
     @Override
-    protected void setUpView() {
+    protected void setUpView(Bundle savedInstanceState) {
         mContentLayout.removeAllViews(); // 移除全部的子view
         mContentView = LayoutInflater.from(this).inflate(
                 getContentLayoutId(), null

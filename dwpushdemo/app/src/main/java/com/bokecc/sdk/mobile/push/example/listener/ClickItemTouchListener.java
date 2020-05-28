@@ -7,7 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * 作者 ${郭鹏飞}.<br/>
+ * 作者 ${bokecc}.<br/>
  */
 
 public class ClickItemTouchListener extends RecyclerView.SimpleOnItemTouchListener {

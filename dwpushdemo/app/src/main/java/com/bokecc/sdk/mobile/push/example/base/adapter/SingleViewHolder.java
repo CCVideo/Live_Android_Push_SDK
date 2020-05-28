@@ -6,7 +6,7 @@ import android.view.View;
 import butterknife.ButterKnife;
 
 /**
- * 作者 ${郭鹏飞}.<br/>
+ * 作者 ${bokecc}.<br/>
  */
 public class SingleViewHolder extends RecyclerView.ViewHolder {
 

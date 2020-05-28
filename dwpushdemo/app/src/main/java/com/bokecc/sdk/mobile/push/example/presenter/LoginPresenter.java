@@ -8,14 +8,14 @@ import android.text.TextUtils;
 import com.bokecc.sdk.mobile.push.core.DWPushSession;
 import com.bokecc.sdk.mobile.push.core.listener.OnLoginStatusListener;
 import com.bokecc.sdk.mobile.push.example.contract.LoginContract;
-import com.bokecc.sdk.mobile.push.example.scan.MipcaActivityCapture;
+import com.bokecc.sdk.mobile.push.example.scan.qr_codescan.MipcaActivityCapture;
 import com.bokecc.sdk.mobile.push.exception.DWPushException;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 作者 ${郭鹏飞}.<br/>
+ * 作者 ${bokecc}.<br/>
  */
 public class LoginPresenter implements LoginContract.Presenter {
 
@@ -60,7 +60,7 @@ public class LoginPresenter implements LoginContract.Presenter {
             mPushSession.login(userId, roomId, username, password, new OnLoginStatusListener() {
                 @Override
                 public void failed(final DWPushException e) {
-                    mLoginView.dissmissLoadingView(false);
+                    mLoginView.dismissLoadingView(false);
                     mLoginView.showToast(e.getErrorMessage());
                 }
 
@@ -71,12 +71,12 @@ public class LoginPresenter implements LoginContract.Presenter {
                     setLocalRoomId(roomId);
                     setLocalUsername(username);
                     setLocalPassword(password);
-                    mLoginView.dissmissLoadingView(true);
+                    mLoginView.dismissLoadingView(true);
                 }
             });
         } catch (DWPushException e) {
             e.printStackTrace();
-            mLoginView.dissmissLoadingView(false);
+            mLoginView.dismissLoadingView(false);
         }
     }
 

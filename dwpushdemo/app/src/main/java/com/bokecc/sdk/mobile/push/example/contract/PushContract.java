@@ -9,7 +9,7 @@ import com.bokecc.sdk.mobile.push.example.base.BaseView;
 import com.bokecc.sdk.mobile.push.example.model.ChatEntity;
 
 /**
- * 作者 ${郭鹏飞}.<br/>
+ * 作者 ${bokecc}.<br/>
  */
 public interface PushContract {
 
@@ -21,6 +21,7 @@ public interface PushContract {
 
         void dismissVolume();
 
+        // 显示连接状态 规定 绿色连接成功 红色连接失败 黄色重连 白色未连接 蓝色正在连接/连接断开
         void updateStatus(int color, String message);
 
         void updateChat(ChatEntity chatEntity);
@@ -32,6 +33,22 @@ public interface PushContract {
         void updateRoomUserCount(int count);
 
         void updatePushTime(String time);
+
+        void updatePushNetState(String state);
+
+        // 显示手动录制按钮
+        void enableRecordMode();
+
+        // 隐藏手动录制按钮
+        void disableRecordMode();
+
+        void updateRecordState(int res);
+
+        void enableStopButton();
+
+        void disableStopButton();
+
+        void updateRecordText(String text);
     }
 
     interface Presenter extends BasePresenter {
@@ -114,6 +131,28 @@ public interface PushContract {
          * 添加emoji表情
          */
         void addEmoji(EditText mInput, int position);
+
+
+        /**
+         * 开始录制
+         */
+        void startRecord();
+
+        /**
+         * 暂停录制
+         */
+        void pauseRecord();
+
+        /**
+         * 恢复录制
+         */
+        void resumeRecord();
+
+        /**
+         * 停止录制
+         */
+        void stopRecord();
+
     }
 
 }

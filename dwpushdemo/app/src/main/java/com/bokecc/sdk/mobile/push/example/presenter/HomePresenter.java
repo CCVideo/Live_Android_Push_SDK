@@ -3,7 +3,7 @@ package com.bokecc.sdk.mobile.push.example.presenter;
 import com.bokecc.sdk.mobile.push.example.contract.HomeContract;
 
 /**
- * 作者 ${郭鹏飞}.<br/>
+ * 作者 ${bokecc}.<br/>
  */
 public class HomePresenter implements HomeContract.Presenter {
 

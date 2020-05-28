@@ -36,7 +36,7 @@ public class SplashActivity extends BaseNoPresenterActivity {
 
 
     @Override
-    protected void setUpView() {
+    protected void setUpView(Bundle savedInstanceState) {
         //取消状态栏
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);

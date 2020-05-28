@@ -15,7 +15,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * 作者 ${郭鹏飞}.<br/>
+ * 作者 ${bokecc}.<br/>
  */
 public class CommonPopup extends BasePopupWindow {
 

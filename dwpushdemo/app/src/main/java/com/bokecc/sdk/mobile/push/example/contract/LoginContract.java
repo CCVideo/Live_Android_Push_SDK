@@ -6,7 +6,7 @@ import com.bokecc.sdk.mobile.push.example.base.BaseView;
 import java.util.Map;
 
 /**
- * 作者 ${郭鹏飞}.<br/>
+ * 作者 bokecc.<br/>
  */
 public interface LoginContract {
 
@@ -33,9 +33,10 @@ public interface LoginContract {
 
         /**
          * 隐藏加载弹出框
+         *
          * @param isLoginSucceed 登录是否成功
          */
-        void dissmissLoadingView(boolean isLoginSucceed);
+        void dismissLoadingView(boolean isLoginSucceed);
 
         /**
          * 获取用户id输入框的内容

@@ -13,7 +13,7 @@ import com.bokecc.sdk.mobile.push.tools.LogUtil;
 import butterknife.BindView;
 
 /**
- * 作者 ${郭鹏飞}.<br/>
+ * 作者 ${bokecc}.<br/>
  */
 public class SpeedAdapter extends SingleChooseAdapter<SpeedAdapter.SpeedViewHolder, SpeedRtmpNode> {
 

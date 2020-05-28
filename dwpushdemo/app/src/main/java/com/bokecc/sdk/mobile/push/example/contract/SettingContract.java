@@ -4,7 +4,7 @@ import com.bokecc.sdk.mobile.push.example.base.BasePresenter;
 import com.bokecc.sdk.mobile.push.example.base.BaseView;
 
 /**
- * 作者 ${郭鹏飞}.<br/>
+ * 作者 ${bokecc}.<br/>
  */
 public interface SettingContract {
 

@@ -94,13 +94,13 @@ public class LogcatHelper {
             // cmds = "logcat *:e *:w | grep \"(" + mPID + ")\"";
             // cmds = "logcat | grep \"(" + mPID + ")\"";//打印所有日志信息
             // cmds = "logcat -s way"; //打印标签过滤信息
-            mCmds = "logcat *:e *:w | grep \"(" + mPID + ")\"";
+            mCmds = "logcat *:e *:w *:i | grep \"(" + mPID + ")\"";
         }
 
         public void stopLogs() {
             mRunning = false;
-            Log.e(TAG, "推流日志输出结束，准备上传日志");
-            LogReporter.getInstance(mContext).reportLog(mLogFile.getPath(), mLogFile.getName());
+            Log.e(TAG, "推流日志输出结束");
+            // LogReporter.getInstance(mContext).reportLog(mLogFile.getPath(), mLogFile.getName());
         }
 
         @Override
@@ -155,8 +155,7 @@ public class LogcatHelper {
      */
     public static String getFileName() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String date = format.format(new Date(System.currentTimeMillis()));
-        return date;
+        return format.format(new Date(System.currentTimeMillis()));
     }
 }
 

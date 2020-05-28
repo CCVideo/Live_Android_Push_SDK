@@ -3,7 +3,7 @@ package com.bokecc.sdk.mobile.push.example.base.anim;
 import android.animation.Animator;
 
 /**
- * 作者 ${郭鹏飞}.<br/>
+ * 作者 ${bokecc}.<br/>
  */
 public class BaseAnimatorListener implements Animator.AnimatorListener {
     @Override

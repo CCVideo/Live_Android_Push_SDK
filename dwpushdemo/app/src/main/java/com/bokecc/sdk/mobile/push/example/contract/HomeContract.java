@@ -7,7 +7,7 @@ import com.bokecc.sdk.mobile.push.example.base.BaseView;
 import java.util.ArrayList;
 
 /**
- * 作者 ${郭鹏飞}.<br/>
+ * 作者 ${bokecc}.<br/>
  */
 public interface HomeContract {
 

@@ -1,0 +1,13 @@
+ext {
+    android = [
+            SDK_BASENAME    : "dwpush",
+            SDK_VERSION_CODE: 211,
+            SDK_VERSION     : "2.1.1"
+    ]
+
+
+}
+
+
+
+

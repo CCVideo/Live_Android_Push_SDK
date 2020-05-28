@@ -31,10 +31,10 @@ import butterknife.OnClick;
 public class SettingActivity extends TitleActivity<HomePresenter, SettingActivity.HomeViewHolder> implements HomeContract.View, Observer {
 
     // 当前的帧率
-    private int mFpsCurrentValue = 16;
+    private int mFpsCurrentValue = 20;
 
     //当前的码率
-    private int mBitrateCurrentValue = 550;
+    private int mBitrateCurrentValue = 400;
 
     // 使用美颜
     private boolean mUseBeauty = true;
@@ -43,7 +43,7 @@ public class SettingActivity extends TitleActivity<HomePresenter, SettingActivit
     private int mOrientationIndex = 0;
 
     // 摄像头索引
-    private int mCameraTypeIndex = 0;
+    private int mCameraTypeIndex = 1;
 
     // 分辨率索引
     private int mResolutionIndex = 0;
@@ -57,13 +57,24 @@ public class SettingActivity extends TitleActivity<HomePresenter, SettingActivit
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Override
-    protected void setUpView() {
-        super.setUpView();
+    protected void setUpView(Bundle savedInstanceState) {
+        DWPushConfig pushConfig = (DWPushConfig) getIntent().getExtras().getSerializable(PushActivity.KEY_PUSH_CONFIG);
+        mFpsCurrentValue = pushConfig.fps;
+        mBitrateCurrentValue = pushConfig.bitrate / 1000;
+        mUseBeauty = pushConfig.isBeauty;
+        mOrientationIndex = pushConfig.orientation;
+        mCameraTypeIndex = pushConfig.cameraType;
+        mResolutionIndex = pushConfig.videoResolution;
 
-        String titleContent = "";
+
+        super.setUpView(savedInstanceState);
+
+        String titleContent;
         if (DWPushSession.getInstance() != null && !TextUtils.isEmpty(DWPushSession.getInstance().getLiveRoomName())) {
             titleContent = DWPushSession.getInstance().getLiveRoomName();
         } else {
@@ -75,7 +86,7 @@ public class SettingActivity extends TitleActivity<HomePresenter, SettingActivit
                 new BaseOnTitleClickListener() {
                     @Override
                     public void onLeftClick() {
-                        mPresenter.exit();
+                        onBackPressed();
                     }
                 }
         );
@@ -140,7 +151,7 @@ public class SettingActivity extends TitleActivity<HomePresenter, SettingActivit
                 break;
             case Config.SELECT_TYPE_CAMERA:
                 mCameraTypeIndex = data.getIntExtra(Config.SELECT_POSITION, 0);
-                mViewHolder.mCamera.setValue(mCameraTypeIndex == 0 ? "前置摄像头" : "后置摄像头");
+                mViewHolder.mCamera.setValue(mCameraTypeIndex == DWPushConfig.CAMERA_FRONT ? "前置摄像头" : "后置摄像头");
                 break;
 
             case Config.SELECT_TYPE_RESOLUTION:
@@ -206,11 +217,11 @@ public class SettingActivity extends TitleActivity<HomePresenter, SettingActivit
 
         // 初始化横屏模式
         private void initOrientationWindow() {
-            mOrientation.setCheckedImmediately(mOrientationIndex == 1);
+            mOrientation.setCheckedImmediately(mOrientationIndex == DWPushConfig.LANDSCAPE);
             mOrientation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    mOrientationIndex = isChecked ? 1 : 0;
+                    mOrientationIndex = isChecked ? DWPushConfig.LANDSCAPE : DWPushConfig.PORTRAIT;
                 }
             });
         }
@@ -228,7 +239,7 @@ public class SettingActivity extends TitleActivity<HomePresenter, SettingActivit
 
         // 初始化摄像头选项模式
         private void initCameraWindow() {
-            mCamera.setValue(mCameraTypeIndex == 0 ? "前置摄像头" : "后置摄像头");
+            mCamera.setValue(mCameraTypeIndex == DWPushConfig.CAMERA_FRONT ? "前置摄像头" : "后置摄像头");
             mCamera.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -285,10 +296,11 @@ public class SettingActivity extends TitleActivity<HomePresenter, SettingActivit
         // 初始化码率选项模式
         private void initBitrateWindow() {
             // 如果当前默认的码率超过了用户当前账号支持的最大码率，则修正一下
+
             if (mBitrateCurrentValue > getMaxBitrate()) {
                 mBitrateCurrentValue = getMaxBitrate();
             }
-            mBitrate.setValue(String.valueOf(mBitrateCurrentValue + "kbs"));
+            mBitrate.setValue(mBitrateCurrentValue + "kbs");
             mBitrate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -320,6 +332,8 @@ public class SettingActivity extends TitleActivity<HomePresenter, SettingActivit
             });
         }
 
+        // 开始推流
+        @Deprecated
         @OnClick(R.id.id_push_btn)
         void startPush() {
             Bundle bundle = new Bundle();
@@ -327,14 +341,36 @@ public class SettingActivity extends TitleActivity<HomePresenter, SettingActivit
                     fps(mFpsCurrentValue).
                     beauty(mUseBeauty).
                     bitrate(mBitrateCurrentValue).
-                    orientation(mOrientationIndex == 0 ? DWPushConfig.PORTRAIT : DWPushConfig.LANDSCAPE).
-                    cameraType(mCameraTypeIndex == 0 ? DWPushConfig.CAMERA_FRONT : DWPushConfig.CAMERA_BACK).
-                    videoResolution(mResolutionIndex == 0 ? DWPushConfig.RESOLUTION_LOW :
-                            (mResolutionIndex == 1) ? DWPushConfig.RESOLUTION_SD : DWPushConfig.RESOLUTION_HD).
+                    orientation(mOrientationIndex).
+                    cameraType(mCameraTypeIndex).
+                    videoResolution(mResolutionIndex).
                     rtmpNodeIndex(mServerPos).
                     build();
             bundle.putSerializable(PushActivity.KEY_PUSH_CONFIG, pushConfig);
             go(PushActivity.class, bundle);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResultForPreview();
+        super.onBackPressed();
+    }
+
+    private void setResultForPreview() {
+        Bundle bundle = new Bundle();
+        DWPushConfig pushConfig = new DWPushConfig.DWPushConfigBuilder().
+                fps(mFpsCurrentValue).
+                beauty(mUseBeauty).
+                bitrate(mBitrateCurrentValue).
+                orientation(mOrientationIndex).
+                cameraType(mCameraTypeIndex).
+                videoResolution(mResolutionIndex).
+                rtmpNodeIndex(mServerPos).
+                build();
+        bundle.putSerializable(PushActivity.KEY_PUSH_CONFIG, pushConfig);
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
     }
 }

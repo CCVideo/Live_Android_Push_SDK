@@ -58,14 +58,14 @@ public class SelectActivity extends AppCompatActivity implements View.OnClickLis
 
         setContentView(R.layout.activity_select);
         mRoot = getWindow().getDecorView().findViewById(android.R.id.content);
-        mBackView = (ImageView) findViewById(R.id.id_list_back);
-        mTitleView = (TextView) findViewById(R.id.id_list_title);
-        mListRight = (TextView) findViewById(R.id.id_list_right);
+        mBackView = findViewById(R.id.id_list_back);
+        mTitleView = findViewById(R.id.id_list_title);
+        mListRight = findViewById(R.id.id_list_right);
 
-        mTipView = (TextView) findViewById(R.id.id_select_tip);
+        mTipView = findViewById(R.id.id_select_tip);
 
         // 初始化RecyclerView
-        mSelectDatas = (RecyclerView) findViewById(R.id.id_select_datas);
+        mSelectDatas = findViewById(R.id.id_select_datas);
         mSelectDatas.setLayoutManager(new LinearLayoutManager(this));
         mSelectDatas.addItemDecoration(new RecycleViewDivider(this, LinearLayoutManager.HORIZONTAL, DensityUtil.dp2px(this, 1),
                 Color.parseColor("#E8E8E8"), DensityUtil.dp2px(this, 19), DensityUtil.dp2px(this, 19)));
@@ -80,8 +80,8 @@ public class SelectActivity extends AppCompatActivity implements View.OnClickLis
                 mTitleView.setText(getResources().getString(R.string.camera));
 
                 mAdapter = new StringRecycleAdapter(this);
-                datas.add("前置摄像头");
                 datas.add("后置摄像头");
+                datas.add("前置摄像头");
                 mAdapter.bindDatas(datas);
 
                 break;

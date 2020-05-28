@@ -12,7 +12,7 @@ import com.bokecc.sdk.mobile.push.example.view.DotsTextView;
 import butterknife.BindView;
 
 /**
- * 作者 ${郭鹏飞}.<br/>
+ * 作者 ${bokecc}.<br/>
  */
 public class LoadingPopup extends BasePopupWindow {
 

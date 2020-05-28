@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import com.bokecc.sdk.mobile.push.example.R;
 import com.bokecc.sdk.mobile.push.example.util.DensityUtil;
 
-public class HeadView extends ImageView {
+public class HeadView extends android.support.v7.widget.AppCompatImageView {
 
     public static final int DEFAULT_COLOR = Color.TRANSPARENT;
     public static final int DEFAULT_WIDTH = 0;

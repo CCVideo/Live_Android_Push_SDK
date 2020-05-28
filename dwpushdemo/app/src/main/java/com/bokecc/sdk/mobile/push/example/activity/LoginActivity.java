@@ -16,15 +16,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.bokecc.sdk.mobile.push.core.DWPushConfig;
 import com.bokecc.sdk.mobile.push.example.R;
 import com.bokecc.sdk.mobile.push.example.SplashActivity;
 import com.bokecc.sdk.mobile.push.example.base.BaseOnTitleClickListener;
 import com.bokecc.sdk.mobile.push.example.base.NewBasePopupWindow;
 import com.bokecc.sdk.mobile.push.example.base.activity.TitleActivity;
 import com.bokecc.sdk.mobile.push.example.contract.LoginContract;
+import com.bokecc.sdk.mobile.push.example.logging.LogReporter2;
 import com.bokecc.sdk.mobile.push.example.popup.TxtLoadingPopup;
 import com.bokecc.sdk.mobile.push.example.presenter.LoginPresenter;
-import com.bokecc.sdk.mobile.push.example.scan.MipcaActivityCapture;
+import com.bokecc.sdk.mobile.push.example.scan.qr_codescan.MipcaActivityCapture;
 import com.bokecc.sdk.mobile.push.example.view.LoginLineLayout;
 
 import java.util.Map;
@@ -49,7 +51,6 @@ public class LoginActivity extends TitleActivity<LoginPresenter, LoginActivity.L
     @BindString(R.string.test_passwd)
     String mPasswordValue;
     // -----------------------------------------------------------
-
     private boolean isCreateFromWeb;
     private boolean autoLogin;
     private String webData;
@@ -66,11 +67,14 @@ public class LoginActivity extends TitleActivity<LoginPresenter, LoginActivity.L
             Log.e("LoginActivity", "onCreate，Receive Web Launch data ： " + webData);
         }
         super.onCreate(savedInstanceState);
+
+        // 添加日志上报功能
+        LogReporter2.initReport(getApplication());
     }
 
     @Override
-    protected void setUpView() {
-        super.setUpView();
+    protected void setUpView(Bundle savedInstanceState) {
+        super.setUpView(savedInstanceState);
         setTitleStatus(TitleImageStatus.DISMISS, 0, "登录直播间", TitleImageStatus.SHOW, R.drawable.nav_ic_code,
                 new BaseOnTitleClickListener() {
                     @Override
@@ -163,13 +167,13 @@ public class LoginActivity extends TitleActivity<LoginPresenter, LoginActivity.L
 
         @Override
         public void afterTextChanged(Editable editable) {
-            mViewHolder.mLogin.setEnabled(isNewLoginButtonEnabled(mViewHolder.mUserid, mViewHolder.mRoomid, mViewHolder.mUsername,mViewHolder.mPasswd));
+            mViewHolder.mLogin.setEnabled(isNewLoginButtonEnabled(mViewHolder.mUserid, mViewHolder.mRoomid, mViewHolder.mUsername, mViewHolder.mPasswd));
         }
     };
 
 
     public static boolean isNewLoginButtonEnabled(LoginLineLayout... views) {
-        for (int i=0; i<views.length; i++) {
+        for (int i = 0; i < views.length; i++) {
             if ("".equals(views[i].getText().trim())) {
                 return false;
             }
@@ -182,10 +186,10 @@ public class LoginActivity extends TitleActivity<LoginPresenter, LoginActivity.L
         if (requestCode == 100) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission Allow
-                Toast.makeText(LoginActivity.this, "Permission Allow", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(LoginActivity.this, "Permission Allow", Toast.LENGTH_SHORT).show();
             } else {
                 // Permission Denied
-                Toast.makeText(LoginActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(LoginActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
             }
             return;
         }
@@ -267,17 +271,40 @@ public class LoginActivity extends TitleActivity<LoginPresenter, LoginActivity.L
         mLoadingPopup.setOnPopupDismissListener(new NewBasePopupWindow.OnPopupDismissListener() {
             @Override
             public void onDismiss() {
-                if(isSuccessed) {
-                    Intent intent = new Intent(LoginActivity.this, SettingActivity.class);
-                    startActivity(intent);
+                if (isSuccessed) {
+                    // 登录成功，就跳转到预览界面
+                    startPreview();
                 }
             }
         });
         mLoadingPopup.show(mViewHolder.mLogin);
     }
 
+
+    /**
+     * 登陆成功，跳转到预览界面
+     */
+    private void startPreview() {
+        isCreateFromWeb = false;
+        // 设置默认的推流参数，并跳转到推流界面
+        Bundle bundle = new Bundle();
+        DWPushConfig pushConfig = new DWPushConfig.DWPushConfigBuilder()
+                .fps(20)
+                .beauty(true)
+                .bitrate(400)
+                .orientation(DWPushConfig.PORTRAIT)
+                .cameraType(DWPushConfig.CAMERA_FRONT)
+                .videoResolution(DWPushConfig.RESOLUTION_HD)
+                .rtmpNodeIndex(0)
+                .build();
+        bundle.putSerializable(PushActivity.KEY_PUSH_CONFIG, pushConfig);
+
+        // 跳转到推流预览界面
+        go(PushActivity.class, bundle);
+    }
+
     @Override
-    public void dissmissLoadingView(boolean isLoginSucceed) {
+    public void dismissLoadingView(boolean isLoginSucceed) {
         isSuccessed = isLoginSucceed;
         mLoadingPopup.dismiss();
     }
@@ -310,17 +337,11 @@ public class LoginActivity extends TitleActivity<LoginPresenter, LoginActivity.L
                 String result = bundle.getString("result");
                 Map<String, String> params = mPresenter.parseUrlForParams(result);
                 updateDisplayByScanResult(params);
-            } else if (resultCode == MipcaActivityCapture.RESULT_CANCEL) {
-                showToast("取消扫描!!!");
-            } else if (resultCode == MipcaActivityCapture.RESULT_FAILED) {
-                showToast("扫描失败,请重试!!!");
-            } else if (resultCode == MipcaActivityCapture.RESULT_TIME_OUT) {
-                showToast("扫描超时,请重试!!!");
             }
         }
     }
 
-    class LoginViewHolder extends TitleActivity.ViewHolder {
+    public class LoginViewHolder extends TitleActivity.ViewHolder {
         @BindView(R.id.lll_login_push_uid)
         LoginLineLayout mUserid;
         @BindView(R.id.lll_login_push_roomid)

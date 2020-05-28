@@ -13,11 +13,10 @@ import android.os.Looper;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import com.bokecc.sdk.mobile.push.example.R;
 
-public class DotsTextView extends TextView {
+public class DotsTextView extends android.support.v7.widget.AppCompatTextView {
 
     private JumpingSpan dotOne;
     private JumpingSpan dotTwo;

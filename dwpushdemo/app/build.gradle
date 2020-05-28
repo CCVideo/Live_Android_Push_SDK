@@ -1,46 +1,67 @@
 apply plugin: 'com.android.application'
-
 android {
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "com.bokecc.sdk.mobile.push.example"
         minSdkVersion 18
-        targetSdkVersion 25
-        versionCode 12
-        versionName "2.0.0"
+        targetSdkVersion 28
+        versionCode rootProject.ext.android.SDK_VERSION_CODE
+        versionName rootProject.ext.android.SDK_VERSION
 
         ndk {
             // 设置支持的SO库架构
-            abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+            abiFilters 'x86', 'armeabi-v7a', 'arm64-v8a'
         }
     }
 
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
 }
 
+
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    //    compile 'com.tencent.bugly:crashreport:latest.release'
-    //其中latest.release指代最新版本号,也可以指定明确的版本号,例如2.1.5
-    //    compile 'com.tencent.bugly:nativecrashreport:latest.release'
-    //其中latest.release指代最新版本号,也可以指定明确的版本号,例如2.2.0
-    implementation files('libs/zxing.jar')
-    implementation files('libs/commons-net-3.5.jar')
-    compile 'com.android.support:support-v4:25.1.1'
-    compile 'com.android.support:appcompat-v7:25.1.1'
-    compile 'com.android.support:design:25.1.1'
-    compile 'com.android.support:recyclerview-v7:25.1.1'
-    compile 'org.adw.library:discrete-seekbar:1.0.1'
-    compile 'com.tencent.bugly:crashreport:2.3.1'
-    compile 'com.tencent.bugly:nativecrashreport:3.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.jakewharton:butterknife:8.8.1'
+
+
+    // --------------集成sdk--------------------
+    // 远端集成
+//    implementation 'com.bokecc:dwpush:2.2.0'
+
+    // 本地集成
+    implementation files('libs/dwpush-2.2.0.jar')
+    implementation files('libs/engine-0.8.3.1.jar')
+
+    // ---------------demo 引用--------------------
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    //noinspection GradleDependency
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    //noinspection GradleDependency
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'org.adw.library:discrete-seekbar:1.0.1'
+    //noinspection GradleDependency
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    //noinspection GradleDependency
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    implementation files('libs/dwpush.jar')
-    implementation 'com.squareup.okhttp3:okhttp:3.3.1'
-    implementation('io.socket:socket.io-client:0.7.0') {
-        exclude group: 'org.json', module: 'json'
-    }
+    // 二维码扫描库
+    //noinspection GradleDependency
+    implementation 'com.google.zxing:core:3.2.1'
+    // ftp网络
+    implementation 'commons-net:commons-net:3.5'
+    // 上传日志
+    implementation 'com.aliyun.dpa:oss-android-sdk:2.5.0'
+
+    // bugly
+    implementation 'com.tencent.bugly:crashreport:3.2.2'
+    implementation 'com.tencent.bugly:nativecrashreport:3.7.1'
+
 }
