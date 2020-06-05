@@ -224,9 +224,12 @@ public class PushPresenter implements PushContract.Presenter {
                 mPushView.dismissDialogLoading();
                 mPushView.updateStatus(colors[2], mActivity.getResources().getString(R.string.text_push_status_success));
                 roomInfo = mPushSession.getRoomInfo();
+
                 if (roomInfo.getManuallyRecordMode() == 1) {
                     // 手动录制开启
-                    mPushView.enableRecordMode();
+                    if (mPushSession.getRecordState() == DWPushSession.RecordState.IDLE || mPushSession.getRecordState() == DWPushSession.RecordState.STOP) {
+                        mPushView.enableRecordMode();
+                    }
                 } else {
                     // 手动录制关闭
                     mPushView.disableRecordMode();

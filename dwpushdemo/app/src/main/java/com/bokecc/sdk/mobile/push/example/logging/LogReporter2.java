@@ -124,7 +124,7 @@ public class LogReporter2 {
         return zipFile;
     }
 
-    /* 上传日志文件 */
+    /* access modifiers changed from: private */
     public static void uploadFile(OSSClient oos, final File file) {
 
     }

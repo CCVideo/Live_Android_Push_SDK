@@ -742,28 +742,36 @@ public class PushActivity extends BaseActivity<PushPresenter> implements PushCon
 
     }
 
+    private boolean isCancelRecord;
+
     @Override
     public void enableRecordMode() {
-        mIvRecord.setVisibility(View.VISIBLE);
-        mPushStop.setVisibility(View.GONE);
-        final CommonPopup recordPopup = new CommonPopup(this);
-        recordPopup.setOKText("录制");
-        recordPopup.setCancelText("不录制");
-        recordPopup.setTip("是否需要同时开始录制，不录制不会生成回放");
-        recordPopup.setOnOkClickListener(new CommonPopup.OnOkClickListener() {
-            @Override
-            public void onOk() {
-                mPresenter.startRecord();
-                recordPopup.dismiss(null);
-            }
-        });
-        recordPopup.setOnCancelClickListener(new CommonPopup.OnCancelClickListener() {
-            @Override
-            public void onCancel() {
-                recordPopup.dismiss(null);
-            }
-        });
-        recordPopup.show(findViewById(android.R.id.content));
+        if (!isCancelRecord) {
+            mIvRecord.setVisibility(View.VISIBLE);
+            mPushStop.setVisibility(View.GONE);
+            final CommonPopup recordPopup = new CommonPopup(this);
+            recordPopup.setOKText("录制");
+            recordPopup.setCancelText("不录制");
+            recordPopup.setTip("是否需要同时开始录制，不录制不会生成回放");
+            recordPopup.setOnOkClickListener(new CommonPopup.OnOkClickListener() {
+                @Override
+                public void onOk() {
+
+                    mPresenter.startRecord();
+                    recordPopup.dismiss(null);
+
+
+                }
+            });
+            recordPopup.setOnCancelClickListener(new CommonPopup.OnCancelClickListener() {
+                @Override
+                public void onCancel() {
+                    isCancelRecord = true;
+                    recordPopup.dismiss(null);
+                }
+            });
+            recordPopup.show(findViewById(android.R.id.content));
+        }
     }
 
     @Override
@@ -941,12 +949,14 @@ public class PushActivity extends BaseActivity<PushPresenter> implements PushCon
     void recordClick() {
         // 点击录制按钮
         mPresenter.startRecord();
+        isCancelRecord = false;
 
     }
 
     @OnClick(R.id.id_push_stop_record)
     void stopRecord() {
         // 点击停止录制
+        isCancelRecord = true;
         mPresenter.stopRecord();
     }
 
