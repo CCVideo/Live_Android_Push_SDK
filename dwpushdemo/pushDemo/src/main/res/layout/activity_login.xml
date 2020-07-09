@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorLoginBg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/loginTipsTheme"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:text="直播间信息" />
+
+        <LinearLayout style="@style/loginInfosLayoutTheme">
+
+            <RelativeLayout style="@style/loginLineLayoutTheme">
+
+                <TextView
+                    android:id="@+id/id_user_id_icon"
+                    style="@style/loginLineTextViewTheme"
+                    android:text="CC账号ID" />
+
+                <com.bokecc.sdk.mobile.push.example.view.LoginLineLayout
+                    android:id="@+id/lll_login_push_uid"
+                    style="@style/loginLayoutTheme" />
+
+                <View style="@style/loginLineBottomViewTheme" />
+
+            </RelativeLayout>
+
+            <RelativeLayout style="@style/loginLineLayoutTheme">
+
+                <TextView
+                    android:id="@+id/id_roomid_icon"
+                    style="@style/loginLineTextViewTheme"
+                    android:text="直播间ID" />
+
+                <com.bokecc.sdk.mobile.push.example.view.LoginLineLayout
+                    android:id="@+id/lll_login_push_roomid"
+                    style="@style/loginLayoutTheme" />
+
+                <View style="@style/loginLineBottomViewTheme" />
+
+            </RelativeLayout>
+
+            <RelativeLayout style="@style/loginLineLayoutTheme">
+
+                <TextView
+                    android:id="@+id/id_username_icon"
+                    style="@style/loginLineTextViewTheme"
+                    android:text="昵称" />
+
+                <com.bokecc.sdk.mobile.push.example.view.LoginLineLayout
+                    android:id="@+id/lll_login_push_name"
+                    style="@style/loginLayoutTheme" />
+
+                <View style="@style/loginLineBottomViewTheme" />
+
+            </RelativeLayout>
+
+            <RelativeLayout style="@style/loginLineLayoutTheme">
+
+                <TextView
+                    android:id="@+id/id_password_icon"
+                    style="@style/loginLineTextViewTheme"
+                    android:text="密码" />
+
+                <com.bokecc.sdk.mobile.push.example.view.LoginLineLayout
+                    android:id="@+id/lll_login_push_password"
+                    style="@style/loginLayoutTheme" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/id_login_submit"
+            style="@style/loginButtonTheme"
+            android:text="登录" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:textColor="@color/editTextHintColor" />
+
+</RelativeLayout>

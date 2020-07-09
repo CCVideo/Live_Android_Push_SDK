@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_floating_window"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:alpha="0.9"
+    app:cardBackgroundColor="#FF9893BB"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="0dp">
+
+    <LinearLayout
+        android:id="@+id/ll_floating_window_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="3dp"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/id_float_volume"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:src="@drawable/push_screen_volume_on" />
+
+        <ImageView
+            android:id="@+id/id_float_close"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/push_screen_close" />
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

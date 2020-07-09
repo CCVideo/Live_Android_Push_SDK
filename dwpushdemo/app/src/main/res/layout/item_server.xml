@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout style="@style/ItemSimpleBgStyle"
-                xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <com.bokecc.sdk.mobile.push.example.view.SettingItemLayout
-        android:id="@+id/id_server_item"
-        style="@style/ItemServerStyle"/>
-
-</RelativeLayout>

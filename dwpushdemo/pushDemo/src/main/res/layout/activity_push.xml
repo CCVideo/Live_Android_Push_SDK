@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/id_push_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <!--显示视频-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.bokecc.sdk.mobile.push.view.DWTextureView
+            android:id="@+id/id_push_gl_surface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+    <!--推流显示-->
+    <RelativeLayout
+        android:id="@+id/id_push_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <!--连接状态-->
+        <TextView
+            android:id="@+id/id_push_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="@string/text_push_status_noconnect"
+            android:textColor="#ffffff"
+            android:textSize="15sp" />
+
+        <!--录制状态-->
+        <TextView
+            android:id="@+id/id_record_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/id_push_status"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="暂无录制"
+            android:textColor="@android:color/holo_red_dark" />
+
+        <!--直播中->左侧顶部显示-->
+        <RelativeLayout
+            android:id="@+id/id_push_info"
+            android:layout_width="158dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/id_push_status"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/push_info_bg"
+            android:paddingEnd="15dp">
+
+            <TextView
+                android:id="@+id/id_push_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="7dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxEms="14"
+                android:singleLine="true"
+                android:textColor="#ffffff"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/id_push_watch_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/id_push_username"
+                android:layout_alignStart="@id/id_push_username"
+                android:layout_marginTop="7dp"
+                android:text="在线人数：1人"
+                android:textColor="#ffffff"
+                android:textSize="11dp" />
+
+            <TextView
+                android:id="@+id/id_push_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/id_push_watch_count"
+                android:layout_alignStart="@id/id_push_watch_count"
+                android:layout_marginTop="7dp"
+                android:textColor="#ffffff"
+                android:textSize="11dp" />
+
+            <TextView
+                android:id="@+id/id_push_net"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/id_push_time"
+                android:layout_alignStart="@id/id_push_username"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="7dp"
+                android:text="网络状态：优"
+                android:textColor="#ffffff"
+                android:textSize="11dp" />
+
+        </RelativeLayout>
+
+        <!--底部按钮列表-->
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/id_push_oper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/id_push_close"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp"
+                android:clickable="true"
+                android:src="@drawable/push_close"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageView
+                android:id="@+id/id_push_volume"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignTop="@id/id_push_close"
+                android:layout_marginEnd="5dp"
+                android:clickable="true"
+                android:src="@drawable/push_volume"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/id_push_close" />
+
+            <ImageView
+                android:id="@+id/id_push_camera"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignTop="@id/id_push_close"
+                android:layout_marginEnd="5dp"
+                android:layout_toStartOf="@id/id_push_volume"
+                android:clickable="true"
+                android:src="@drawable/push_swap_camera"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/id_push_volume" />
+
+            <ImageView
+                android:id="@+id/id_push_beauty"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignTop="@id/id_push_close"
+                android:layout_marginEnd="5dp"
+                android:layout_toStartOf="@id/id_push_camera"
+                android:clickable="true"
+                android:src="@drawable/push_beauty_open"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/id_push_camera" />
+
+            <ImageView
+                android:id="@+id/id_push_private_chat"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignTop="@id/id_push_close"
+                android:layout_marginEnd="5dp"
+                android:layout_toStartOf="@id/id_push_beauty"
+                android:clickable="true"
+                android:src="@drawable/push_private_msg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/id_push_beauty" />
+
+            <ImageView
+                android:id="@+id/id_push_record"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignTop="@id/id_push_close"
+                android:layout_marginEnd="5dp"
+                android:layout_toStartOf="@id/id_push_private_chat"
+                android:clickable="true"
+                android:src="@drawable/push_record_start"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/id_push_private_chat" />
+
+            <ImageView
+                android:id="@+id/id_push_stop_record"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="5dp"
+                android:clickable="true"
+                android:src="@drawable/push_record_stop"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/id_push_record"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/id_push_chat"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignTop="@id/id_push_close"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:clickable="true"
+                android:src="@drawable/push_chat"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+        </android.support.constraint.ConstraintLayout>
+
+        <FrameLayout
+            android:id="@+id/id_push_temp_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00ffffff"
+            android:clickable="true"
+            android:visibility="gone" />
+
+        <!--美颜控制面板-->
+        <include
+            android:id="@+id/id_push_beautiful_window"
+            layout="@layout/push_beautiful_setting_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+        <!--声音控制面板-->
+        <include
+            android:id="@+id/id_push_volume_window"
+            layout="@layout/push_volume_setting_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+        <!--聊天列表-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/id_push_chat_list"
+            android:layout_width="200dp"
+            android:layout_height="100dp"
+            android:layout_above="@id/id_push_oper"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="5dp"
+            android:background="#00000000" />
+
+        <!--聊天相关-->
+        <LinearLayout
+            android:id="@+id/id_push_chat_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#c2ffffff"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <!--私聊用户列表-->
+            <LinearLayout
+                android:id="@+id/id_private_chat_user_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="#d8f8f8f8">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:ellipsize="end"
+                        android:maxEms="15"
+                        android:maxLines="1"
+                        android:text="@string/push_private_list_tip"
+                        android:textColor="#333333"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/id_private_chat_user_close"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:clickable="true"
+                        android:paddingStart="15dp"
+                        android:paddingEnd="15dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/private_close" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line"
+                    android:background="#DDDDDD" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/id_private_chat_user_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="262dp"
+                    android:background="#e6FAFAFA"
+                    android:overScrollMode="never"
+                    android:scrollbars="none" />
+            </LinearLayout>
+
+            <!--私聊列表-->
+            <LinearLayout
+                android:id="@+id/id_private_chat_msg_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="#d8f8f8f8">
+
+                    <ImageView
+                        android:id="@+id/id_private_chat_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:clickable="true"
+                        android:paddingStart="15dp"
+                        android:paddingEnd="15dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/private_back" />
+
+                    <TextView
+                        android:id="@+id/id_private_chat_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:ellipsize="end"
+                        android:maxEms="15"
+                        android:maxLines="1"
+                        android:textColor="#333333"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/id_private_chat_close"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:clickable="true"
+                        android:paddingStart="15dp"
+                        android:paddingEnd="15dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/private_close" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line"
+                    android:background="#DDDDDD" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/id_private_chat_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="210dp"
+                    android:background="#e6FAFAFA"
+                    android:overScrollMode="never"
+                    android:scrollbars="none" />
+            </LinearLayout>
+
+            <!--文字输入-->
+            <RelativeLayout
+                android:id="@+id/id_chat_send_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/id_push_chat_send"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="58dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="11dp"
+                    android:background="@drawable/push_send_bg"
+                    android:text="@string/text_push_send"
+                    android:textColor="#ffffff" />
+
+                <RelativeLayout
+                    android:id="@+id/id_chat_input_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="11dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_toStartOf="@id/id_push_chat_send"
+                    android:background="@drawable/push_input_bg">
+
+                    <ImageView
+                        android:id="@+id/id_push_chat_emoji"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="9dp"
+                        android:layout_marginEnd="9dp"
+                        android:layout_marginBottom="9dp"
+                        android:clickable="true"
+                        android:src="@drawable/push_chat_emoji_normal" />
+
+                    <EditText
+                        android:id="@+id/id_push_chat_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_toStartOf="@id/id_push_chat_emoji"
+                        android:background="@null"
+                        android:hint="@string/text_chat_input_hint"
+                        android:imeOptions="flagNoExtractUi"
+                        android:textColorHint="#666666"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <!--表情-->
+            <GridView
+                android:id="@+id/id_push_emoji_grid"
+                android:layout_width="match_parent"
+                android:layout_height="207dp"
+                android:background="#f2efed"
+                android:numColumns="7"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+        <!--遮罩层-->
+        <FrameLayout
+            android:id="@+id/id_push_mask_layer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/id_push_chat_layout"
+            android:background="#00FFFFFF"
+            android:clickable="true"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <!--预览显示-->
+    <RelativeLayout
+        android:id="@+id/id_preview_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/room_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginRight="15dp"
+            android:alpha="0.3"
+            android:background="@drawable/preview_title_bg"
+            android:gravity="center"
+            android:maxLines="3"
+            android:padding="15dp"
+            android:text="房间标题"
+            android:textColor="#fafafa"
+            android:textSize="20dp" />
+
+        <ImageView
+            android:id="@+id/id_push_setting"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/push_setting" />
+
+        <ImageView
+            android:id="@+id/id_preview_beauty"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="80dp"
+            android:src="@drawable/beauty_setting_open" />
+
+        <ImageView
+            android:id="@+id/id_push_screen"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="144dp"
+            android:src="@drawable/screen_setting_protrait" />
+
+        <ImageView
+            android:id="@+id/id_preview_camera"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="210dp"
+            android:src="@drawable/camera_rotate" />
+
+        <ImageView
+            android:id="@+id/id_push_setting_back"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/setting_back" />
+
+        <Button
+            android:id="@+id/id_to_push"
+            style="@style/loginButtonTheme"
+            android:layout_width="288dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="36dp"
+            android:layout_marginRight="36dp"
+            android:layout_marginBottom="56dp"
+            android:text="开始直播" />
+
+
+    </RelativeLayout>
+
+    <!--推屏幕界面-->
+    <LinearLayout
+        android:id="@+id/id_push_screen_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBgDefault"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <!--title-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:padding="20dp"
+            android:text="屏幕共享"
+            android:textColor="@android:color/black"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6">
+
+            <com.bokecc.sdk.mobile.push.example.view.WaveView
+                android:id="@+id/wave_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:id="@+id/id_push_screen_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <!--计时器-->
+                <Chronometer
+                    android:id="@+id/push_screen_timer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="屏幕共享中"
+                    android:textColor="@color/colorPilotButtonPressBg"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!--结束推屏-->
+        <Button
+            android:id="@+id/id_stop_push_screen"
+            style="@style/loginButtonTheme"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="36dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="36dp"
+            android:layout_marginBottom="120dp"
+            android:text="结束屏幕共享" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

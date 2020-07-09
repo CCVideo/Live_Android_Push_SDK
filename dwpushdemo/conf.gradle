@@ -1,8 +1,8 @@
 ext {
     android = [
             SDK_BASENAME    : "dwpush",
-            SDK_VERSION_CODE: 211,
-            SDK_VERSION     : "2.1.1"
+            SDK_VERSION_CODE: AppCode as int,
+            SDK_VERSION     : AppVersion
     ]
 
 

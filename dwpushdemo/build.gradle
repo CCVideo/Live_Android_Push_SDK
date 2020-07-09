@@ -3,16 +3,15 @@ buildscript {
     repositories {
         jcenter()
         google()
-        // 外网
         maven {
             url 'http://nexus-app.bokecc.com/repository/sdk-group/'
         }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
+        classpath 'com.android.tools.build:gradle:3.5.3'
         // 配置符号表
-        classpath 'com.tencent.bugly:symtabfileuploader:latest.release'
+        classpath 'com.tencent.bugly:symtabfileuploader:2.2.1'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
 
@@ -24,12 +23,12 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
-        google()
-        // 外网
+
         maven {
             url 'http://nexus-app.bokecc.com/repository/sdk-group/'
         }
+        jcenter()
+        google()
     }
 }
 
